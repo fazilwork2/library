@@ -1,14 +1,13 @@
 const { default: mongoose } = require("mongoose");
 const { authorModul } = require("../schema/author.schem");
+const customError = require("../error/custom.error");
 
 const GetAllAuthors = async (req, res, next) => {
   try {
     const author = await authorModul.find();
     res.status(200).json(author);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error)
   }
 };
 
@@ -42,9 +41,7 @@ const AddAuthors = async (req, res, next) => {
       message: "auhtor created",
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error)
   }
 };
 
@@ -54,9 +51,8 @@ const GetOneAuthors = async (req, res, next) => {
     const auhtor = await authorModul.findById(id);
 
     if (!auhtor) {
-      return res.status(404).json({
-        message: "author not founded",
-      });
+            throw customError.BadRequest(404,"author not found")
+
     }
 
     res.status(200).json({
@@ -64,9 +60,7 @@ const GetOneAuthors = async (req, res, next) => {
       message: "author id finded",
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error)
   }
 };
 const Search = async (req, res, next) => {
@@ -79,9 +73,7 @@ const Search = async (req, res, next) => {
     })
     res.status(200).json(author);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error)
   }
 };
 
@@ -92,9 +84,8 @@ const DeleatAuthors = async (req, res, next) => {
     const auhtor = await authorModul.findById(id);
 
     if (!auhtor) {
-      return res.status(404).json({
-        message: "author not founded",
-      });
+            throw customError.BadRequest(404,"author not found")
+
     }
 
     await authorModul.findByIdAndDelete(id)
@@ -104,9 +95,7 @@ const DeleatAuthors = async (req, res, next) => {
     });
 
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+   next(error)
   }
 };
 
@@ -127,9 +116,7 @@ const updateAuthor = async (req, res, next) => {
     const auhtor = await authorModul.findById(id);
 
     if (!auhtor) {
-      return res.status(404).json({
-        message: "author not founded",
-      });
+      throw customError.BadRequest(404,"author not found")
     }
 
     await authorModul.findByIdAndUpdate(id, {
@@ -148,9 +135,7 @@ const updateAuthor = async (req, res, next) => {
       message: "auhtor updated",
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error)
   }
 };
 
