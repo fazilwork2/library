@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const { conectDb } = require("./config/connect.mongodb")
 const { authorRouter } = require("./routes/author.routes")
+const { bookRouter } = require("./routes/book.routes")
 require("dotenv").config()
 
 const app = express()
@@ -14,5 +15,7 @@ const PORT = process.env.PORT || 3000
 
 // routes
 app.use(authorRouter)
+app.use(bookRouter)
+
 
 app.listen(PORT,()=>{console.log(`server run in ${PORT}`);})

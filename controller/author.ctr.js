@@ -69,6 +69,22 @@ const GetOneAuthors = async (req, res, next) => {
     });
   }
 };
+const Search = async (req, res, next) => {
+  try {
+    const {fuleName} = req.query
+    const author = await authorModul.find({
+      $or:[
+        {fuleName:{$regex:fuleName,$options:`i`}}
+      ]
+    })
+    res.status(200).json(author);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 
 const DeleatAuthors = async (req, res, next) => {
   try {
@@ -144,4 +160,5 @@ module.exports = {
   DeleatAuthors,
   AddAuthors,
   updateAuthor,
+  Search
 };
